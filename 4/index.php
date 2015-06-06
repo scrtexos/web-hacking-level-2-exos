@@ -38,7 +38,6 @@ if(isset($_POST['username']) && isset($_POST['password'])){
   $password_hash = hash("sha256", $_POST['password']);
   $query = "SELECT admin FROM users WHERE username='".$safe_username."' and password='".$password_hash."'";
   $result = (int)$db->querySingle($query);
-  echo $result;
   if($result != 0){
     $_SESSION['admin']=$result;
   }
