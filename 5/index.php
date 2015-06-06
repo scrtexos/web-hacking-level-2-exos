@@ -69,6 +69,20 @@ function generate_random_token(){
 }
 
 ?>
+<!--
+function generate_random_token(){
+    $chars = 'abcdefghijkmnopqrstuvwxyz023456789!@#$';
+    srand(time());
+    $passwd = '';
+    $chars_length = strlen($chars) - 1;
+    
+    for ($i = 0; $i < 10; $i++){
+        $passwd .= substr($chars, (rand() % $chars_length), 1);
+    }
+
+    return md5($passwd);
+}
+!-->
 
 <!DOCTYPE html>
 <html lang="en">
