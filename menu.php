@@ -17,12 +17,12 @@ else{
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li <?php if($num=='0') { echo 'class="active"'; } ?>><a href="/level2/">Home</a></li>
-            <li <?php if($num=='3') { echo 'class="active"'; } ?>><a href="/level2/3/">Exercice 3</a></li>
-            <li <?php if($num=='4') { echo 'class="active"'; } ?>><a href="/level2/4/">Exercice 4</a></li>
-            <li <?php if($num=='5') { echo 'class="active"'; } ?>><a href="/level2/5/">Exercice 5</a></li>
-            <li <?php if($num=='6') { echo 'class="active"'; } ?>><a href="/level2/6/">Exercice 6</a></li>
-            <li <?php if($num=='7') { echo 'class="active"'; } ?>><a href="/level2/7/">Exercice 7</a></li>
-            <li <?php if($num=='8') { echo 'class="active"'; } ?>><a href="/level2/8/">Exercice 8</a></li>
+            <li <?php if($num=='0') { echo 'class="active"'; } ?>><a href="/">Home</a></li>
+            <li <?php if($num=='3') { echo 'class="active"'; } ?>><a href="/3/">Exercice 3</a></li>
+            <li <?php if($num=='4') { echo 'class="active"'; } ?>><a href="/4/">Exercice 4</a></li>
+            <li <?php if($num=='5') { echo 'class="active"'; } ?>><a href="/5/">Exercice 5</a></li>
+            <li <?php if($num=='6') { echo 'class="active"'; } ?>><a href="/6/">Exercice 6</a></li>
+            <li <?php if($num=='7') { echo 'class="active"'; } ?>><a href="/7/">Exercice 7</a></li>
+            <li <?php if($num=='8') { echo 'class="active"'; } ?>><a href="/8/">Exercice 8</a></li>
           </ul>
         </div><!--/.nav-collapse -->
