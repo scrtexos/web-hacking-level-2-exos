@@ -22,7 +22,7 @@ function create_user_if_not_exist($username, $password){
   $db->close();
 }
 
-$tbl_users = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, username TEXT, password TEXT, admin INTEGER);";
+$tbl_users = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, username TEXT, password TEXT);";
 
 $db = new SQLite3($dbname);
 $db->exec($tbl_users);
@@ -104,7 +104,7 @@ if(isset($_COOKIE['my_session'])){
           if($logged==1){
         ?>
 	<!--
-	?debug=1 for more information
+	?debug=1 for more informations
 	-->
         <p>Hello <?php echo htmlentities($username); ?> you are connected !</p>
         <button type="button" class="btn btn-default" onclick="javascript:document.location='./?logout=1'">Logout</button>
