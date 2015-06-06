@@ -1,14 +1,16 @@
 <?php
+session_name(session_name().'_exo2_9');
+session_start();
 if(isset($_GET['logout'])){
-  setcookie('my_session','');
+  unset($_SESSION['logged']);
+  session_destroy();
   header('Location: ./');
 }
 $dbname = 'db/.htdb.db';
 $admin_password = 'p8RnQlVccP3nl5SJN96SKaHZlM441jEZ';
 $admin_username = 'admin';
-$key = 'cQDnU8DR15tyw0opQHxhhWPaJmLQ35ok';
 
-function create_user_if_not_exist($username, $password){
+function create_user_if_not_exist($username, $password, $secret){
   global $dbname;
   $db = new SQLite3($dbname);
   $safe_username = $db->escapeString($username);
@@ -16,46 +18,60 @@ function create_user_if_not_exist($username, $password){
   $query = "SELECT id FROM users WHERE username='".$safe_username."'";
   $result = (int)$db->querySingle($query);
   if($result == 0){
-    $query = "INSERT INTO users (username, password) VALUES ('".$username."', '".$password_hash."')";
+    $safe_secret = $db->escapeString($secret);
+    $query = "INSERT INTO users (username, password, secret) VALUES ('".$safe_username."', '".$password_hash."', '".$safe_secret."')";
     $db->exec($query);
   }
   $db->close();
 }
 
-$tbl_users = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, username TEXT, password TEXT, admin INTEGER);";
+$tbl_users = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, username TEXT, password TEXT, secret TEXT);";
 
 $db = new SQLite3($dbname);
 $db->exec($tbl_users);
 $db->close();
-create_user_if_not_exist($admin_username, $admin_password);
+create_user_if_not_exist($admin_username, $admin_password, 'This is my secret dude !');
 
 
-if(isset($_POST['username']) && isset($_POST['password'])){
-  create_user_if_not_exist($_POST['username'], $_POST['password']);
+if(isset($_POST['message'])){
+  $find = preg_match("#(http://[^ ]+)#",$_POST['message'], $message);
+  if($find == 1){
+    $cmd = 'phantomjs bot.js \''.escapeshellcmd($message[1]).'\' '.$_SERVER['SERVER_ADDR'];
+    shell_exec($cmd);
+  }
+}
+
+if(isset($_COOKIE['phantomjs-cheat']) && $_COOKIE['phantomjs-cheat'] === '60afe57f665abca1a54cc83955cf3adf0a7db9e5abc8334bf77d4cc1a6fb599a'){
+  $db = new SQLite3($dbname);
+  $safe_username = $db->escapeString($admin_username);
+  $query = "SELECT id FROM users WHERE username='".$safe_username."'";
+  $_SESSION['logged'] = (int)$db->querySingle($query);
+  $db->close();
+}
+
+if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['secret'])){
+  create_user_if_not_exist($_POST['username'], $_POST['password'], $_POST['secret']);
   $db = new SQLite3($dbname);
   $safe_username = $db->escapeString($_POST['username']);
   $password_hash = hash("sha256", $_POST['password']);
-  $query = "SELECT * FROM users WHERE username='".$safe_username."' and password='".$password_hash."'";
-  $result = $db->querySingle($query, true);
-  if($result){
-    setcookie('my_session', base64_encode(mcrypt_ecb(MCRYPT_DES, $key, serialize($result), MCRYPT_ENCRYPT)));
+  $query = "SELECT id FROM users WHERE username='".$safe_username."' and password='".$password_hash."'";
+  $result = (int)$db->querySingle($query);
+  if($result != 0){
+    $_SESSION['logged']=$result;
+    $_SESSION['username']=$_POST['username'];
   }
   $db->close();
-  header('Location: ./');
-}
-$logged=0;
-if(isset($_COOKIE['my_session'])){
-  $test = mcrypt_ecb(MCRYPT_DES, $key, base64_decode($_COOKIE['my_session']), MCRYPT_DECRYPT);
-  if($_GET['debug']==1){
-    echo $test;
-  }
-  $values = unserialize($test);
-  if(isset($values['username'])){
-    $logged = 1;
-    $username = $values['username'];
-  }
 }
 
+if(isset($_SESSION['logged']) && isset($_GET['action'])&& isset($_GET['callback']) && $_GET['action'] == 'getSecret'){
+  $db = new SQLite3($dbname);
+  $query = "SELECT secret FROM users WHERE id=".$_SESSION['logged'];
+  $secret = $db->querySingle($query);
+  $db->close();
+  header('Content-type: application/javascript; charset=utf-8');
+  echo $_GET['callback'] . '('.json_encode($secret).');';
+  exit(0);
+}
 
 ?>
 <!DOCTYPE html>
@@ -98,16 +114,17 @@ if(isset($_COOKIE['my_session'])){
     <div class="container">
 
       <div class="starter-template">
-        <h1>Exercice 8 - ECB</h1>
-        <p class="lead">Login with admin account.</p>
+        <h1>Exercice 9 - JSONP</h1>
+        <p class="lead">Get admin secret.</p>
+        <?php if(isset($_POST['message'])){ echo '<p>Thank you, message sent to the administrator !</p>'; } ?>
         <?php
-          if($logged==1){
+          if(isset($_SESSION['logged'])){
         ?>
-	<!--
-	?debug=1 for more information
-	-->
-        <p>Hello <?php echo htmlentities($username); ?> you are connected !</p>
-        <button type="button" class="btn btn-default" onclick="javascript:document.location='./?logout=1'">Logout</button>
+        <p>Hello <?php echo htmlentities($_SESSION['username']); ?></p>
+        <p id="secretContent"></p>
+        <div class="form-group">
+          <button type="button" class="btn btn-default" onclick="javascript:document.location='./?logout=1'">Logout</button>
+        </div>
         <?php
           }
           else{
@@ -126,12 +143,27 @@ if(isset($_COOKIE['my_session'])){
             </div>
           </div>
           <div class="form-group">
+            <label for="secret" class="col-sm-2 control-label">Secret</label>
+            <div class="col-sm-10">
+              <input type="secret" class="form-control" id="secret" name="secret" placeholder="Secret">
+            </div>
+          </div>
+          <div class="form-group">
             <button type="submit" class="btn btn-default">Submit</button>
           </div>
         </form>
         <?php
           }
         ?>
+        <form id="my_form" method="POST" action="">
+          <div class="form-group">
+            <label for="message" class="col-sm-2 control-label">Message to admin :</label>
+            <textarea name="message" id="message" class="form-control" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-default">Submit</button>
+          </div>
+        </form>
       </div>
     </div><!-- /.container -->
 
@@ -145,5 +177,10 @@ if(isset($_COOKIE['my_session'])){
     <script src="../bootstrap/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+    <script>
+    $.ajax({url: '?action=getSecret', dataType:'jsonp'}).done(function(data){
+      $('#secretContent').text('Here is your secret : '+data);
+    });
+    </script>
   </body>
 </html>
