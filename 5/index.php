@@ -82,6 +82,20 @@ function generate_random_token(){
 
     return md5($passwd);
 }
+
+if(isset($_GET['token']) && !empty($_GET['token'])){
+  $db = new SQLite3($dbname);
+  $safe_token = $db->escapeString($_GET['token']);
+  $query = "SELECT username FROM users WHERE token = '".$safe_token."'";
+  $username = $db->querySingle($query);
+  if($username){
+    $message = 'Reset password';
+  }
+  else{
+    $message = 'Invalid Token';
+  }
+  $db->close();
+}
 !-->
 
 <!DOCTYPE html>
