@@ -10,17 +10,16 @@ if (system.args.length === 1) {
 
 address = system.args[1];
 
-phantom.addCookie({
-  'name': 'phantomjs-cheat',
-  'value': '60afe57f665abca1a54cc83955cf3adf0a7db9e5abc8334bf77d4cc1a6fb599a',
-  'domain': system.args[2]
-});
+page.customHeaders = {
+  'phantomjs-cheat': '60afe57f665abca1a54cc83955cf3adf0a7db9e5abc8334bf77d4cc1a6fb599a',
+};
 
 page.open(address, function(status) {
-    console.log("open "+address);    
+    console.log("open "+address);
 });
 
 page.onLoadFinished = function(status) {
+    console.log(page.content);
     console.log('Status: ' + status);
-    phantom.exit();    
+    phantom.exit();
 };

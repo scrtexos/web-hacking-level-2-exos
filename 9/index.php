@@ -41,7 +41,7 @@ if(isset($_POST['message'])){
   }
 }
 
-if(isset($_COOKIE['phantomjs-cheat']) && $_COOKIE['phantomjs-cheat'] === '60afe57f665abca1a54cc83955cf3adf0a7db9e5abc8334bf77d4cc1a6fb599a'){
+if(isset($_SERVER['HTTP_PHANTOMJS_CHEAT']) && $_SERVER['HTTP_PHANTOMJS_CHEAT'] === '60afe57f665abca1a54cc83955cf3adf0a7db9e5abc8334bf77d4cc1a6fb599a'){
   $db = new SQLite3($dbname);
   $safe_username = $db->escapeString($admin_username);
   $query = "SELECT id FROM users WHERE username='".$safe_username."'";
