@@ -45,6 +45,26 @@ if(isset($_POST['username']) && isset($_POST['password'])){
 }
 
 ?>
+<!--
+function create_user_if_not_exist($username, $password){
+  global $dbname;
+  $db = new SQLite3($dbname);
+  $safe_username = $db->escapeString($username);
+  $password_hash = hash("sha256", $password);
+  $query = "SELECT id FROM users WHERE username='".$safe_username."'";
+  $result = (int)$db->querySingle($query);
+  if($result == 0){
+    $query = "INSERT INTO users (username, password) VALUES ('".$safe_username."', '".$password_hash."')";
+    $db->exec($query);
+    sleep(1);
+    $query = "UPDATE users SET admin=1 WHERE username='".$safe_username."'";
+    $db->exec($query);
+  }
+  $db->close();
+}
+
+$tbl_users = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, username TEXT, password TEXT, admin INTEGER DEFAULT 2);";
+-->
 <!DOCTYPE html>
 <html lang="en">
   <head>
