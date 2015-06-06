@@ -1,0 +1,28 @@
+<?php
+$find = preg_match('#/([0-9-]+)/#',$_SERVER['REQUEST_URI'],$ex_num);
+if($find){
+  $num = $ex_num[1];
+}
+else{
+  $num = '0';
+}
+?>
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li <?php if($num=='0') { echo 'class="active"'; } ?>><a href="/level2/">Home</a></li>
+            <li <?php if($num=='3') { echo 'class="active"'; } ?>><a href="/level2/3/">Exercice 3</a></li>
+            <li <?php if($num=='4') { echo 'class="active"'; } ?>><a href="/level2/4/">Exercice 4</a></li>
+            <li <?php if($num=='5') { echo 'class="active"'; } ?>><a href="/level2/5/">Exercice 5</a></li>
+            <li <?php if($num=='6') { echo 'class="active"'; } ?>><a href="/level2/6/">Exercice 6</a></li>
+            <li <?php if($num=='7') { echo 'class="active"'; } ?>><a href="/level2/7/">Exercice 7</a></li>
+            <li <?php if($num=='8') { echo 'class="active"'; } ?>><a href="/level2/8/">Exercice 8</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
