@@ -25,5 +25,6 @@ else{
             <li <?php if($num=='7') { echo 'class="active"'; } ?>><a href="/7/">Exercice 7</a></li>
             <li <?php if($num=='8') { echo 'class="active"'; } ?>><a href="/8/">Exercice 8</a></li>
 	    <li <?php if($num=='9') { echo 'class="active"'; } ?>><a href="/9/">Exercice 9</a></li>
+	    <li <?php if($num=='10') { echo 'class="active"'; } ?>><a href="/10/">Twittbook</a></li>
           </ul>
         </div><!--/.nav-collapse -->
