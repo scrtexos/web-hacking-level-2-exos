@@ -1,12 +1,12 @@
 <?php
-session_name(session_name().'_exo2_4');
-session_start();
 if(isset($_GET['logout'])){
-  unset($_SESSION['logged']);
-  session_destroy();
+  setcookie('my_session','');
   header('Location: ./');
 }
 $dbname = 'db/.htdb.db';
+$admin_password = 'p8RnQlVccP3nl5SJN96SKaHZlM441jEZ';
+$admin_username = 'admin';
+$key = 'cQDnU8DR15tyw0opQHxhhWPaJmLQ35ok';
 
 function create_user_if_not_exist($username, $password){
   global $dbname;
@@ -16,55 +16,48 @@ function create_user_if_not_exist($username, $password){
   $query = "SELECT id FROM users WHERE username='".$safe_username."'";
   $result = (int)$db->querySingle($query);
   if($result == 0){
-    $query = "INSERT INTO users (username, password) VALUES ('".$safe_username."', '".$password_hash."')";
-    $db->exec($query);
-    sleep(1);
-    $query = "UPDATE users SET admin=1 WHERE username='".$safe_username."'";
+    $query = "INSERT INTO users (username, password) VALUES ('".$username."', '".$password_hash."')";
     $db->exec($query);
   }
   $db->close();
 }
 
-$tbl_users = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, username TEXT, password TEXT, admin INTEGER DEFAULT 2);";
+$tbl_users = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, username TEXT, password TEXT);";
 
 $db = new SQLite3($dbname);
 $db->exec($tbl_users);
 $db->close();
+create_user_if_not_exist($admin_username, $admin_password);
+
 
 if(isset($_POST['username']) && isset($_POST['password'])){
   create_user_if_not_exist($_POST['username'], $_POST['password']);
   $db = new SQLite3($dbname);
   $safe_username = $db->escapeString($_POST['username']);
   $password_hash = hash("sha256", $_POST['password']);
-  $query = "SELECT admin FROM users WHERE username='".$safe_username."' and password='".$password_hash."'";
-  $result = (int)$db->querySingle($query);
-  if($result != 0){
-    $_SESSION['admin']=$result;
+  $query = "SELECT * FROM users WHERE username='".$safe_username."' and password='".$password_hash."'";
+  $result = $db->querySingle($query, true);
+  if($result){
+    setcookie('my_session', base64_encode(mcrypt_ecb(MCRYPT_DES, $key, serialize($result), MCRYPT_ENCRYPT)));
   }
   $db->close();
+  header('Location: ./');
 }
+$logged=0;
+if(isset($_COOKIE['my_session'])){
+  $test = mcrypt_ecb(MCRYPT_DES, $key, base64_decode($_COOKIE['my_session']), MCRYPT_DECRYPT);
+  if($_GET['debug']==1){
+    echo $test;
+  }
+  $values = unserialize($test);
+  if(isset($values['username'])){
+    $logged = 1;
+    $username = $values['username'];
+  }
+}
+
 
 ?>
-<!--
-function create_user_if_not_exist($username, $password){
-  global $dbname;
-  $db = new SQLite3($dbname);
-  $safe_username = $db->escapeString($username);
-  $password_hash = hash("sha256", $password);
-  $query = "SELECT id FROM users WHERE username='".$safe_username."'";
-  $result = (int)$db->querySingle($query);
-  if($result == 0){
-    $query = "INSERT INTO users (username, password) VALUES ('".$safe_username."', '".$password_hash."')";
-    $db->exec($query);
-    sleep(1);
-    $query = "UPDATE users SET admin=1 WHERE username='".$safe_username."'";
-    $db->exec($query);
-  }
-  $db->close();
-}
-
-$tbl_users = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, username TEXT, password TEXT, admin INTEGER DEFAULT 2);";
--->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -105,17 +98,17 @@ $tbl_users = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCRE
     <div class="container">
 
       <div class="starter-template">
-        <h1>Exercice 4 - Race condition</h1>
-        <p class="lead">Get admin access</p>
+        <h1>Exercice 8 - ECB</h1>
+        <p class="lead">Login with admin account.</p>
         <?php
-          if(isset($_SESSION['admin'])){
-            if($_SESSION['admin'] == 2){
-              echo '<p>Hello Administrator</p>';
-            }
-            else{
-              echo '<p>Hello simple user</p>';
-            }
-            echo '<button type="button" class="btn btn-default" onclick="javascript:document.location=\'./?logout=1\'">Logout</button>';
+          if($logged==1){
+        ?>
+	<!--
+	?debug=1 for more informations
+	-->
+        <p>Hello <?php echo htmlentities($username); ?> you are connected !</p>
+        <button type="button" class="btn btn-default" onclick="javascript:document.location='./?logout=1'">Logout</button>
+        <?php
           }
           else{
         ?>
@@ -137,7 +130,7 @@ $tbl_users = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCRE
           </div>
         </form>
         <?php
-        }
+          }
         ?>
       </div>
     </div><!-- /.container -->

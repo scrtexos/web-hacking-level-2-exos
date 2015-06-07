@@ -1,3 +1,14 @@
+<?php 
+if(isset($_GET['lang'])){
+  $lang = $_GET['lang'];
+}
+else{
+  $lang = 'en';
+}
+
+include($lang.'.php');
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -38,16 +49,10 @@
     <div class="container">
 
       <div class="starter-template">
-        <h1>Exercice 3 - XXE</h1>
-        <p class="lead">Access admin panel</p>
-        <?php
-			if($_GET['password']=='Yq0fwHomiuJiaiTRbVA8L8iZsQ3clxOx'){
-				echo 'Well done !';
-			}
-			else{
-				echo 'Forbidden !';
-			}
-		?>
+        <h1>Exercice 7 - LFI</h1>
+        <p class="lead">Pwn !</p>
+        <a href="?lang=en">EN</a> - <a href="?lang=fr">FR</a> - <a href="?lang=cl">Clingon</a>
+        <p><?php echo $message; ?></p>
       </div>
 
     </div><!-- /.container -->
