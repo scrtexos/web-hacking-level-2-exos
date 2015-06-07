@@ -105,7 +105,7 @@ $tbl_users = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCRE
     <div class="container">
 
       <div class="starter-template">
-        <h1>Exercice 4 - Race condition</h1>
+        <h1>Exercice 9 - Race condition</h1>
         <p class="lead">Get admin access</p>
         <?php
           if(isset($_SESSION['admin'])){

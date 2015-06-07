@@ -38,7 +38,7 @@
     <div class="container">
 
       <div class="starter-template">
-        <h1>Exercice 6 - uXSS</h1>
+        <h1>Mutation XSS</h1>
         <p class="lead">Test uXSS</p>
         <textarea id="in" class="form-control" rows="3"></textarea>
         <hr />
