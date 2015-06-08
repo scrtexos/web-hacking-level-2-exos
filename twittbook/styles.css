@@ -1,0 +1,129 @@
+div#global {
+	width: 1200px;
+	text-align: center;
+	font-size: 11px;
+	font-family: verdana;
+	border: 3px solid #e70;
+	background-color: #fd7;
+	padding: 5px;
+}
+
+div#header {
+	height: 100px;
+	width: 100%;
+	font-size: 40px;
+	position: relative;
+	border: 0px solid black;
+	padding-top: 20px;
+}
+
+div#top {
+	position:relative;
+	padding: 20px;
+	height: 50px;
+	font-size: 15px;
+	text-align: left;
+	border-top: 1px dashed black;
+}
+
+div#left {
+	float: left;
+	width: 200px;
+	border: 0px solid black;
+	min-height: 600px;
+}
+
+div#content {
+	border: 1px solid black;
+	width: 794px;
+	float: left;
+	min-height: 600px;
+	background-color: #ffef91;
+}
+
+div#right {
+	width: 200px;
+	float: right;
+	border: 1px solid black;
+	
+}
+
+div#footer {
+	height: 15px;
+	font-size: 10px;
+	clear: both;
+	border: 0px solid black;
+}
+
+div.friend {
+	border: 1px solid black;
+	margin: 5px;
+	font-size: 10px;
+	padding: 2px;
+	background-color: #ffef91;
+}
+
+div.friend_pic {
+	float: left;
+}
+
+div.friend_status {
+	float: left;
+}
+
+div.profile {
+	margin: 5px;
+	padding: 2px;
+	border: 1px solid black;
+	font-size: 11px;
+}
+
+div.profile_desc {
+	text-align: left;
+}
+
+div.share {
+	width: 700px;
+	padding: 10px;
+	margin: 40px;
+	border: 1px solid black;
+	background-color: #fd7;
+}
+
+div.share_person {
+	float: left;
+	font-weight: bold;
+	margin-right: 30px;
+	font-size: 12px;
+}
+
+div.share_time {
+	font-style: italic;
+	float: right;
+}
+
+div.share_content {
+	font-size: 15px;
+	padding: 5px;
+	text-align: left;
+}
+
+input#talk {
+	border: 0px;
+	height: 35px; 
+	font-size: 18px;
+	width: 550px;
+	padding: 5px;
+	margin-right: 5px;
+	border: 1px solid #f90;
+}
+
+input#talk2 {
+	width: 80px;
+	height: 30px;
+	font-size: 15px;
+	background-color: orange;
+	color: white;
+	font-weight: bold;
+	border-color: #a50;
+}
