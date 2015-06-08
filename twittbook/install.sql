@@ -1,6 +1,6 @@
-/*drop table person;
-drop table shares;
-drop table friends;*/
+drop table if exists person;
+drop table if exists shares;
+drop table if exists friends;
 
 create table person (
 	id INTEGER auto_increment,
@@ -27,6 +27,6 @@ create table friends (
 	PRIMARY KEY(id)
 );
 
-insert into person (name,password) VALUES ('admin',sha1('truite||admin'));
-insert into person (name,password) VALUES ('alain',sha1('truite||alain'));
+insert into person (name,password) VALUES ('admin',sha1('truite||admin123'));
+insert into person (name,password) VALUES ('alain',sha1('truite||alain123'));
 insert into friends (person1,person2) VALUES ((SELECT id FROM person WHERE name = 'admin'),(SELECT id FROM person WHERE name = 'alain'));
