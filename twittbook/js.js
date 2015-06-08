@@ -56,7 +56,7 @@ function getContentReturn() {
 
 function updateContent() {
 	getContent();
-	setInterval('getContent()',2000);
+	setInterval('getContent()',3000);
 }
 
 function getFriends()
@@ -82,7 +82,7 @@ function getFriendsReturn() {
 
 function updateFriends() {
 	getFriends();
-	setInterval('getFriends()',1000);
+	setInterval('getFriends()',3000);
 }
 
 function share()
