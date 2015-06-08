@@ -1,0 +1,27 @@
+var webPage = require('webpage');
+var system = require('system');
+var page = webPage.create();
+page.settings.resourceTimeout = 2000;
+var args = system.args;
+
+phantom.addCookie({
+'name': 'admin_bypass',
+'value': 'ncjsdkalflrheulghjfdnsfhdsjkhjk',
+'domain': '10.13.37.115' //change to real domain at insomnihack
+});
+
+if(args.length === 2) {
+  page.viewportSize = { width: 1920, height: 1080 };
+  page.open(args[1], function start(status) {
+    setTimeout("page.sendEvent('mousemove',100,100); page.sendEvent('click',100,100);",2000);
+	page.render('/tmp/plopit.png');
+    setTimeout("page.sendEvent('click',102,102);",6000);
+    setTimeout("page.render('test.jpeg', {format: 'jpeg', quality: '100'});  phantom.exit();",7000);
+    
+
+  });
+}
+else {
+  console.log("no argument");
+  phantom.exit(1);
+}
