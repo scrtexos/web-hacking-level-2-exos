@@ -107,6 +107,7 @@ if(isset($_COOKIE['my_session'])){
 	?debug=1 for more informations
 	-->
         <p>Hello <?php echo htmlentities($username); ?> you are connected !</p>
+        <?php if($username === "admin") {echo "Congrats, exercice completed!";}?>
         <button type="button" class="btn btn-default" onclick="javascript:document.location='./?logout=1'">Logout</button>
         <?php
           }
